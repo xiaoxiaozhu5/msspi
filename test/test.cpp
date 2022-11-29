@@ -172,12 +172,12 @@ int main()
 		rc = SSL_get_error_msspi(hMsspi, msspi_read(hMsspi, tmp, tmp_len));
 		if(rc == SSL_ERROR_NONE)
 		{
-			std::cout << tmp;
-
 			if(strstr(tmp, "Transfer-Encoding: chunked"))
 			{
 				chunked = true;
 			}
+			std::cout << tmp;
+			delete[] tmp;
 			if(chunked)
 			{
 				goto again;
