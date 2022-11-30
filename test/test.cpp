@@ -280,18 +280,21 @@ void server_test(uint16_t port)
 
 		msspi_set_version(hMsspiHandle, TLS1_1_VERSION, TLS1_3_VERSION);
 
+		//NOTE: generate self-signed certificate
+		//makecert.exe -r -pe -n "cn=MyCA" -$ commercial -a sha1 -b 08/05/2022 -e 01/01/2032 -cy authority -ss my -sr currentuser
+		//export from MMC without private key in base64 encoded X.509 CER file
 		std::string cert_path;
 		get_app_path(cert_path);
-		cert_path += "ca-cert.pem";
+		cert_path += "ca-cert.cer";
 		auto cert_file = read_file_to_buffer(cert_path.c_str());
 		if(cert_file.empty())
 		{
-			std::cout << "msspi: no ca-cert.pem found\n";
+			std::cout << "msspi: no ca-cert.cer found\n";
 			break;
 		}
 		if(!msspi_add_mycert(hMsspiHandle, cert_file.c_str(), cert_file.size()))
 		{
-			std::cout << "msspi: add ca-cert.pem failed\n";
+			std::cout << "msspi: add ca-cert.cer failed\n";
 			break;
 		}
 
